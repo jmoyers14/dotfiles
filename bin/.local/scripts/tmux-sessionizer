@@ -3,7 +3,7 @@
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    selected=$(find ~/projects ~/Workbench ~/Personal -mindepth 1 -maxdepth 1 -type d | fzf)
+    selected=$(find ~/projects ~/Workbench ~/Projects/trova-maven-workspace ~/Projects/trova-mobile-workspace ~/Personal ~/Demos -mindepth 1 -maxdepth 1 -type d | fzf)
 fi
 
 if [[ -z $selected ]]; then
