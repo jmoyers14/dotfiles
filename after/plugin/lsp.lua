@@ -2,9 +2,11 @@ local lsp = require('lsp-zero')
 lsp.preset('recommended')
 
 lsp.ensure_installed({
+    'jinja_lsp',
 	'tsserver',
 	'eslint',
-	'sumneko_lua'
+	'lua_ls',
+    'clangd'
 })
 
 local cmp = require('cmp')
@@ -29,6 +31,5 @@ lsp.set_preferences({
         info = 'I'
     }
 })
-
 
 lsp.setup()

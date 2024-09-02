@@ -8,11 +8,19 @@ return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
 
   use {
-	  'nvim-telescope/telescope.nvim', tag = '0.1.1',
+	  'nvim-telescope/telescope.nvim', tag = '0.1.7',
 	  -- or                            , branch = '0.1.x',
 	  requires = { {'nvim-lua/plenary.nvim'} }
   }
 
+  --[[
+  use {
+      'folke/tokyonight.nvim',
+      config = function()
+          require('tokyonight').setup({})
+          vim.cmd('colorscheme', 'tokyonight')
+      end
+  }
   use({
 	  'rose-pine/neovim',
 	  as = 'rose-pine',
@@ -21,8 +29,34 @@ return require('packer').startup(function(use)
 		  vim.cmd('colorscheme rose-pine')
 	  end
   })
+  use{ 
+      'folke/tokyonight.nvim',
+      config = function()
+          vim.cmd('colorscheme tokyonight-night')
+      end,
+  }
+  ]]--
+  use { "catppuccin/nvim", as = "catppuccin", 
+      config = function() 
+          vim.cmd('colorscheme catppuccin-mocha')
+      end
+  }
 
   use('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
+  use('theprimeagen/harpoon')
+  use('terrastruct/d2-vim')
+
+  use('tpope/vim-fugitive')
+  use('prettier/vim-prettier')
+  use {
+    'zbirenbaum/copilot.lua',
+    cmd = "Copilot",
+    event = "InsertEnter",
+    config = function()
+        require("copilot").setup({})
+    end,
+  }
+
 
   use('mbbill/undotree')
 
