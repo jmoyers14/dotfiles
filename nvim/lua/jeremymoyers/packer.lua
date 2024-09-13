@@ -36,6 +36,7 @@ return require('packer').startup(function(use)
       end,
   }
   ]]--
+
   use { "catppuccin/nvim", as = "catppuccin", 
       config = function() 
           vim.cmd('colorscheme catppuccin-mocha')
@@ -44,7 +45,6 @@ return require('packer').startup(function(use)
 
   use('nvim-treesitter/nvim-treesitter', {run = ':TSUpdate'})
   use('theprimeagen/harpoon')
-  use('terrastruct/d2-vim')
 
   use('tpope/vim-fugitive')
   use('prettier/vim-prettier')
@@ -81,6 +81,20 @@ return require('packer').startup(function(use)
 		  {'L3MON4D3/LuaSnip'},             -- Required
 		  {'rafamadriz/friendly-snippets'}, -- Optional
 	  }
+  }
+
+  use {
+      'pwntester/octo.nvim',
+      requires = {
+          'nvim-lua/plenary.nvim',
+          'nvim-telescope/telescope.nvim',
+          'nvim-tree/nvim-web-devicons',
+      },
+      config = function ()
+          require("octo").setup({
+              default_to_projects_v2 = true,
+          })
+      end
   }
 
 end)

@@ -49,8 +49,8 @@ local function save_profiles(threshold)
 end
 
 time([[Luarocks path setup]], true)
-local package_path_str = "/Users/jmoyers/.cache/nvim/packer_hererocks/2.1.1713773202/share/lua/5.1/?.lua;/Users/jmoyers/.cache/nvim/packer_hererocks/2.1.1713773202/share/lua/5.1/?/init.lua;/Users/jmoyers/.cache/nvim/packer_hererocks/2.1.1713773202/lib/luarocks/rocks-5.1/?.lua;/Users/jmoyers/.cache/nvim/packer_hererocks/2.1.1713773202/lib/luarocks/rocks-5.1/?/init.lua"
-local install_cpath_pattern = "/Users/jmoyers/.cache/nvim/packer_hererocks/2.1.1713773202/lib/lua/5.1/?.so"
+local package_path_str = "/Users/jmoyers/.cache/nvim/packer_hererocks/2.1.1724512491/share/lua/5.1/?.lua;/Users/jmoyers/.cache/nvim/packer_hererocks/2.1.1724512491/share/lua/5.1/?/init.lua;/Users/jmoyers/.cache/nvim/packer_hererocks/2.1.1724512491/lib/luarocks/rocks-5.1/?.lua;/Users/jmoyers/.cache/nvim/packer_hererocks/2.1.1724512491/lib/luarocks/rocks-5.1/?/init.lua"
+local install_cpath_pattern = "/Users/jmoyers/.cache/nvim/packer_hererocks/2.1.1724512491/lib/lua/5.1/?.so"
 if not string.find(package.path, package_path_str, 1, true) then
   package.path = package.path .. ';' .. package_path_str
 end
@@ -119,11 +119,6 @@ _G.packer_plugins = {
     path = "/Users/jmoyers/.local/share/nvim/site/pack/packer/opt/copilot.lua",
     url = "https://github.com/zbirenbaum/copilot.lua"
   },
-  ["d2-vim"] = {
-    loaded = true,
-    path = "/Users/jmoyers/.local/share/nvim/site/pack/packer/start/d2-vim",
-    url = "https://github.com/terrastruct/d2-vim"
-  },
   ["friendly-snippets"] = {
     loaded = true,
     path = "/Users/jmoyers/.local/share/nvim/site/pack/packer/start/friendly-snippets",
@@ -164,6 +159,17 @@ _G.packer_plugins = {
     path = "/Users/jmoyers/.local/share/nvim/site/pack/packer/start/nvim-treesitter",
     url = "https://github.com/nvim-treesitter/nvim-treesitter"
   },
+  ["nvim-web-devicons"] = {
+    loaded = true,
+    path = "/Users/jmoyers/.local/share/nvim/site/pack/packer/start/nvim-web-devicons",
+    url = "https://github.com/nvim-tree/nvim-web-devicons"
+  },
+  ["octo.nvim"] = {
+    config = { "\27LJ\2\nQ\0\0\3\0\4\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\3\0B\0\2\1K\0\1\0\1\0\1\27default_to_projects_v2\2\nsetup\tocto\frequire\0" },
+    loaded = true,
+    path = "/Users/jmoyers/.local/share/nvim/site/pack/packer/start/octo.nvim",
+    url = "https://github.com/pwntester/octo.nvim"
+  },
   ["packer.nvim"] = {
     loaded = true,
     path = "/Users/jmoyers/.local/share/nvim/site/pack/packer/start/packer.nvim",
@@ -197,6 +203,10 @@ _G.packer_plugins = {
 }
 
 time([[Defining packer_plugins]], false)
+-- Config for: octo.nvim
+time([[Config for octo.nvim]], true)
+try_loadstring("\27LJ\2\nQ\0\0\3\0\4\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\3\0B\0\2\1K\0\1\0\1\0\1\27default_to_projects_v2\2\nsetup\tocto\frequire\0", "config", "octo.nvim")
+time([[Config for octo.nvim]], false)
 -- Config for: catppuccin
 time([[Config for catppuccin]], true)
 try_loadstring("\27LJ\2\n@\0\0\3\0\3\0\0056\0\0\0009\0\1\0'\2\2\0B\0\2\1K\0\1\0!colorscheme catppuccin-mocha\bcmd\bvim\0", "config", "catppuccin")
