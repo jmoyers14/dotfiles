@@ -24,8 +24,7 @@ return {
             local lsp = require('lsp-zero').preset({})
 
             lsp.ensure_installed({
-                'jinja_lsp',
-                'tsserver',
+                'ts_ls',
                 'eslint',
                 'lua_ls',
                 'clangd'
@@ -42,7 +41,7 @@ return {
             -- Configure completion
             local cmp = require('cmp')
             local cmp_select = {behavior = cmp.SelectBehavior.Select}
-            
+
             lsp.setup_nvim_cmp({
                 mapping = {
                     ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
@@ -57,6 +56,7 @@ return {
                 -- Your keymaps for LSP can go here
                 local opts = {buffer = bufnr}
                 -- Add any specific keybindings you want here
+                vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
             end)
 
             lsp.setup()
