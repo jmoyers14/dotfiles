@@ -1,2 +1,1 @@
-require("jeremymoyers.remap");
-require("jeremymoyers.set");
+require("jeremymoyers.lazy")
