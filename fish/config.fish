@@ -29,8 +29,9 @@ alias list-node="ls /usr/local/Cellar | grep node"
 alias node16="brew link --overwrite node@16"
 
 
-if test -f ~/secrets.fish
-    source ~/secrets.fish
+set current_dir (dirname (status filename))
+if test -f $current_dir/secrets.fish
+    source $current_dir/secrets.fish
 end
 
 set -gx ANDROID_HOME $HOME/Library/Android/sdk
