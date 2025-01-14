@@ -119,3 +119,13 @@ vim.keymap.set('v', '<C-k>', ":m '<-2<CR>gv=gv", { silent = true })
 
 -- Close quickfix menu
 vim.keymap.set('n', '<leader>q', ':cclose<CR>', { silent = true })
+
+-- Remaps '*' to highlight word under cursor without jumping
+-- Uses vim.fn.expand to get current word (<cword>)
+-- Sets search register ('/' reg) with word boundaries (\< \>)
+-- Enables highlighting (hlsearch) to show matches
+vim.keymap.set('n', '*', function()
+    local word = vim.fn.expand('<cword>')
+    vim.fn.setreg('/', '\\<' .. word .. '\\>')
+    vim.opt.hlsearch = true
+end)
