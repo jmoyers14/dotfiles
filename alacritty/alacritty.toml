@@ -1,0 +1,23 @@
+import = [
+    "~/.config/alacritty/catppuccin-mocha.toml"
+]
+
+[font]
+size = 15
+
+[font.bold]
+family = "FiraCode Nerd Font"
+style = "Bold"
+
+[font.italic]
+family = "FiraCode Nerd Font"
+style = "Italic"
+
+[font.normal]
+family = "FiraCode Nerd Font"
+style = "Regular"
+
+[shell]
+args = ["-l", "-c", "tmux attach || tmux"]
+program = "/usr/local/bin/fish"
+
