@@ -1,0 +1,20 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+
+# Get command line argument or default to current directory
+my $start_dir = $ARGV[0] || ".";
+
+# Change to the start directory
+chdir $start_dir or die "Cannot change to directory $start_dir: $!";
+
+# Get all directories
+opendir(my $dh, ".") or die "Cannot open directory: $!";
+my @dirs = grep { -d && !/^\./ } readdir($dh);
+closedir($dh);
+
+# Run du for each directory and print results
+foreach my $dir (sort @dirs) {
+    chomp(my $size = `du -sh "$dir" 2>/dev/null`);
+    print "$size\n" if $size;
+}
