@@ -6,6 +6,17 @@ return {
     },
     config = function()
         local builtin = require('telescope.builtin')
+
+        require('telescope').setup({
+            pickers = {
+                quickfix = {
+                    path_display = { "tail" },  -- Only show filename
+                    layout_config = {
+                        preview_width = 0.5,    -- Adjust preview window size if needed
+                    },
+                }
+            }
+        })
         
         -- File pickers
         vim.keymap.set('n', '<leader>pf', builtin.find_files, {})
@@ -22,5 +33,8 @@ return {
         
         -- Help
         vim.keymap.set('n', '<leader>h', builtin.help_tags, {})
+
+        -- Open quickfix in telescope
+        vim.keymap.set('n', '<leader>qf', builtin.quickfix, {})
     end,
 }
