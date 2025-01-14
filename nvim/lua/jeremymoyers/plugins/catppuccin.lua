@@ -9,6 +9,10 @@ return {
             -- flavour = "mocha", -- latte, frappe, macchiato, mocha
             -- background = { light = "latte", dark = "mocha" },
             -- transparent_background = false,
+             custom_highlights = {
+                LineNr = { fg = "#958da5" }, -- Normal line numbers
+                CursorLineNr = { fg = "#cba6f7" }, -- Current line number
+            },
         })
         
         -- Set the colorscheme
