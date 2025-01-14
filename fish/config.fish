@@ -2,6 +2,7 @@ if status is-interactive
     # Commands to run in interactive sessions can go here
 end
 fish_add_path /Users/jmoyers/.cargo/bin
+fish_add_path /Users/jmoyers/Personal/dotfiles/bin/.local/scripts
 
 alias erc="vim ~/.config/fish/config.fish"
 alias proj="cd ~/Projects"
@@ -42,5 +43,9 @@ set PATH $PATH /usr/local/bin /usr/local/go/bin /Library/TeX/texbin/pdflatex
 starship init fish | source
 status --is-interactive; and rbenv init - fish | source
 
+# Set up fzf key bindings
+fzf --fish | source
+
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/jmoyers/google-cloud-sdk/path.fish.inc' ]; . '/Users/jmoyers/google-cloud-sdk/path.fish.inc'; end
+
