@@ -40,7 +40,8 @@ return {
                 'ts_ls',
                 'eslint',
                 'lua_ls',
-                'clangd'
+                'clangd',
+                'denols'
             })
 
             -- Configure sign icons
@@ -68,6 +69,9 @@ return {
                     completeopt = 'menu,menuone,noinsert'
                 }
             })
+
+            -- Skip denols in the automatic setup
+            lsp.skip_server_setup({'denols'})
 
             -- Use recommended LSP settings
             lsp.on_attach(function(client, bufnr)

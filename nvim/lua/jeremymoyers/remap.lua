@@ -8,7 +8,7 @@ vim.keymap.set('n', '<leader>tn', function()
 end, { desc = "Toggle relative line numbers" })
 
 -- Generate a github permalink for the current line.
-local function generate_github_permalink()
+local function generate_github_permalink(opts)
     -- Get the full file path and relative path
     local file_path = vim.fn.expand('%:p')
     local relative_path = vim.fn.expand('%:~:.')
@@ -26,13 +26,16 @@ local function generate_github_permalink()
     repo_url = repo_url:gsub("git@github.com:", "https://github.com/")
     repo_url = repo_url:gsub("%.git$", "")
 
-    -- Get the current branch name
-    local handle_branch = io.popen("git rev-parse --abbrev-ref HEAD")
-    local branch = handle_branch:read("*a")
-    handle_branch:close()
-
-    -- Trim any whitespace or newline characters
-    branch = branch:gsub("%s+", "")
+    -- Use specified branch or get current branch name
+    local branch
+    if opts.args and opts.args ~= "" then
+        branch = opts.args
+    else
+        local handle_branch = io.popen("git rev-parse --abbrev-ref HEAD")
+        branch = handle_branch:read("*a")
+        handle_branch:close()
+        branch = branch:gsub("%s+", "") -- Trim whitespace
+    end
 
     -- Generate the permalink
     local permalink = repo_url .. "/blob/" .. branch .. "/" .. relative_path .. "#L" .. line_number
@@ -42,7 +45,10 @@ local function generate_github_permalink()
     print("Permalink copied to clipboard: " .. permalink)
 end
 
-vim.api.nvim_create_user_command('GithubPermalink', generate_github_permalink, {})
+vim.api.nvim_create_user_command('GithubPermalink', generate_github_permalink, {
+    nargs = '?',  -- Accept optional argument
+    desc = 'Generate GitHub permalink (optional: branch name)'
+})
 
 -- Get and yank the current diagnostic message 
 function yank_diagnostic()
