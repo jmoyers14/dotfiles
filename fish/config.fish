@@ -3,6 +3,8 @@ if status is-interactive
 end
 fish_add_path /Users/jmoyers/.cargo/bin
 fish_add_path /Users/jmoyers/Personal/dotfiles/bin/.local/scripts
+fish_add_path /opt/homebrew/bin
+fish_add_path /opt/homebrew/sbin
 
 alias erc="vim ~/.config/fish/config.fish"
 alias proj="cd ~/Projects"
@@ -39,12 +41,12 @@ set -gx ANDROID_HOME $HOME/Library/Android/sdk
 set -gx PATH $PATH:$ANDROID_HOME/emulator
 set -gx PATH $PATH:$ANDROID_HOME/platform-tools
 
-set PATH $PATH /usr/local/bin /usr/local/go/bin /Library/TeX/texbin/pdflatex
 starship init fish | source
-status --is-interactive; and rbenv init - fish | source
+#set PATH $PATH /usr/local/bin /usr/local/go/bin /Library/TeX/texbin/pdflatex
+#status --is-interactive; and rbenv init - fish | source
 
 # Set up fzf key bindings
-fzf --fish | source
+#fzf --fish | source
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/jmoyers/google-cloud-sdk/path.fish.inc' ]; . '/Users/jmoyers/google-cloud-sdk/path.fish.inc'; end
