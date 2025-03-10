@@ -1,4 +1,4 @@
-import = [
+general.import = [
     "~/.config/alacritty/catppuccin-mocha.toml"
 ]
 
@@ -17,7 +17,6 @@ style = "Italic"
 family = "FiraCode Nerd Font"
 style = "Regular"
 
-[shell]
+[terminal.shell]
 args = ["-l", "-c", "tmux attach || tmux"]
-program = "/usr/local/bin/fish"
-
+program = "/opt/homebrew/bin/fish"
