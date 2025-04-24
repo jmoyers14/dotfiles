@@ -7,6 +7,7 @@ fish_add_path /opt/homebrew/opt/ruby/bin
 fish_add_path /opt/homebrew/lib/ruby/gems/3.4.0/bin
 fish_add_path /opt/homebrew/bin
 fish_add_path /opt/homebrew/sbin
+fish_add_path /Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
 
 alias erc="vim ~/.config/fish/config.fish"
 alias tlogout="rm /var/tmp/com.cooltools.remit-trip.cookie"
@@ -19,6 +20,7 @@ end
 set -gx ANDROID_HOME $HOME/Library/Android/sdk
 set -gx PATH $PATH:$ANDROID_HOME/emulator
 set -gx PATH $PATH:$ANDROID_HOME/platform-tools
+set -gx PATH (yarn global bin) $PATH
 
 starship init fish | source
 #set PATH $PATH /usr/local/bin /usr/local/go/bin /Library/TeX/texbin/pdflatex
