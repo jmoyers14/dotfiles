@@ -66,7 +66,7 @@ return {
             }
             
             -- Set up LSP servers using the new vim.lsp.config interface
-            vim.lsp.config('tsserver', common_config)
+            vim.lsp.config('ts_ls', common_config)
             vim.lsp.config('eslint', common_config)
             vim.lsp.config('lua_ls', vim.tbl_deep_extend('force', common_config, {
                 settings = {
@@ -113,7 +113,7 @@ return {
             })
             
             -- Enable configured LSP servers
-            vim.lsp.enable('tsserver')
+            vim.lsp.enable('ts_ls')
             vim.lsp.enable('eslint')
             vim.lsp.enable('lua_ls')
             vim.lsp.enable('clangd')
