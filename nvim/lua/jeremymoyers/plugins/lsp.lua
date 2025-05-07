@@ -1,13 +1,7 @@
 return {
     {
-        'VonHeikemen/lsp-zero.nvim',
-        branch = 'v2.x',
+        'neovim/nvim-lspconfig',
         dependencies = {
-            -- LSP Support
-            {'neovim/nvim-lspconfig'},
-            {'williamboman/mason.nvim'},
-            {'williamboman/mason-lspconfig.nvim'},
-
             -- Autocompletion
             {'hrsh7th/nvim-cmp'},
             {'hrsh7th/cmp-nvim-lsp'},
@@ -15,13 +9,15 @@ return {
             {'hrsh7th/cmp-path'},
             {'saadparwaiz1/cmp_luasnip'},
             {'hrsh7th/cmp-nvim-lua'},
-
             -- Snippets
             {'L3MON4D3/LuaSnip'},
             {'rafamadriz/friendly-snippets'},
         },
         config = function()
+            -- Reserve space in the gutter to avoid layout shifts
+            vim.opt.signcolumn = 'yes'
 
+            -- Configure diagnostics
             vim.diagnostic.config({
                 virtual_text = false,
                 signs = true,
@@ -33,66 +29,122 @@ return {
                     source = 'always',
                 },
             })
-
-            local lsp = require('lsp-zero').preset({})
-
-            lsp.ensure_installed({
-                'ts_ls',
-                'eslint',
-                'lua_ls',
-                'clangd',
-                'denols'
-            })
-
+            
             -- Configure sign icons
-            lsp.set_sign_icons({
-                error = 'E',
-                warn = 'W',
-                hint = 'H',
-                info = 'I'
-            })
-
-            -- Configure completion
-            local cmp = require('cmp')
-            local cmp_select = {behavior = cmp.SelectBehavior.Select}
-            local cmp_mappings = {
-                ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-                ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-                ['<CR>'] = cmp.mapping.confirm({ select = true }),
-                ['<C-Space>'] = cmp.mapping.complete(),
+            local signs = {
+                Error = "E",
+                Warn = "W",
+                Hint = "H",
+                Info = "I",
             }
-
+            
+            for type, icon in pairs(signs) do
+                local hl = "DiagnosticSign" .. type
+                vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+            end
+            
+            -- Add floating window borders to hover and signature help
+            vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
+                vim.lsp.handlers.hover, {
+                    border = "rounded",
+                }
+            )
+            
+            vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
+                vim.lsp.handlers.signature_help, {
+                    border = "rounded",
+                }
+            )
+            
+            -- Configure LSP capabilities for nvim-cmp
+            local capabilities = vim.lsp.protocol.make_client_capabilities()
+            capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+            
+            -- Define common LSP configurations
+            local common_config = {
+                capabilities = capabilities,
+            }
+            
+            -- Set up LSP servers using the new vim.lsp.config interface
+            vim.lsp.config('tsserver', common_config)
+            vim.lsp.config('eslint', common_config)
+            vim.lsp.config('lua_ls', vim.tbl_deep_extend('force', common_config, {
+                settings = {
+                    Lua = {
+                        diagnostics = {
+                            globals = {'vim'}
+                        },
+                        workspace = {
+                            library = vim.api.nvim_get_runtime_file("", true),
+                            checkThirdParty = false,
+                        },
+                        telemetry = {
+                            enable = false,
+                        },
+                    }
+                }
+            }))
+            vim.lsp.config('clangd', common_config)
+            
+            -- Skip denols (similar to your previous skip_server_setup)
+            -- In 0.11, simply not enabling a server achieves this
+            
+            -- Define LSP keymaps on server attach
+            vim.api.nvim_create_autocmd("LspAttach", {
+                callback = function(args)
+                    local bufnr = args.buf
+                    local client = vim.lsp.get_client_by_id(args.data.client_id)
+                    if client == nil then return end
+                    
+                    local opts = {buffer = bufnr}
+                    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+                    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+                    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+                    vim.keymap.set('n', '<leader>vws', vim.lsp.buf.workspace_symbol, opts)
+                    vim.keymap.set('n', '<leader>vd', vim.diagnostic.open_float, opts)
+                    vim.keymap.set('n', '[d', vim.diagnostic.goto_next, opts)
+                    vim.keymap.set('n', ']d', vim.diagnostic.goto_prev, opts)
+                    vim.keymap.set('n', '<leader>vca', vim.lsp.buf.code_action, opts)
+                    vim.keymap.set('n', '<leader>vrr', vim.lsp.buf.references, opts)
+                    vim.keymap.set('n', '<leader>vrn', vim.lsp.buf.rename, opts)
+                    vim.keymap.set('i', '<C-h>', vim.lsp.buf.signature_help, opts)
+                    vim.keymap.set('n', 'gl', vim.diagnostic.open_float, opts)
+                end
+            })
+            
+            -- Enable configured LSP servers
+            vim.lsp.enable('tsserver')
+            vim.lsp.enable('eslint')
+            vim.lsp.enable('lua_ls')
+            vim.lsp.enable('clangd')
+            
+            -- Set up nvim-cmp
+            local cmp = require('cmp')
+            local luasnip = require('luasnip')
+            
             cmp.setup({
-                mapping = cmp_mappings,
+                snippet = {
+                    expand = function(args)
+                        luasnip.lsp_expand(args.body)
+                    end,
+                },
+                sources = {
+                    {name = 'nvim_lsp'},
+                    {name = 'buffer'},
+                    {name = 'path'},
+                    {name = 'luasnip'},
+                },
+                mapping = {
+                    ['<C-p>'] = cmp.mapping.select_prev_item(),
+                    ['<C-n>'] = cmp.mapping.select_next_item(),
+                    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+                    ['<C-Space>'] = cmp.mapping.complete(),
+                },
                 preselect = 'item',
                 completion = {
                     completeopt = 'menu,menuone,noinsert'
                 }
             })
-
-            -- Skip denols in the automatic setup
-            lsp.skip_server_setup({'denols'})
-
-            -- Use recommended LSP settings
-            lsp.on_attach(function(client, bufnr)
-                -- Your keymaps for LSP can go here
-                local opts = {buffer = bufnr}
-                -- Add any specific keybindings you want here
-                vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-                vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-                vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-                vim.keymap.set('n', '<leader>vws', vim.lsp.buf.workspace_symbol, opts)
-                vim.keymap.set('n', '<leader>vd', vim.diagnostic.open_float, opts)
-                vim.keymap.set('n', '[d', vim.diagnostic.goto_next, opts)
-                vim.keymap.set('n', ']d', vim.diagnostic.goto_prev, opts)
-                vim.keymap.set('n', '<leader>vca', vim.lsp.buf.code_action, opts)
-                vim.keymap.set('n', '<leader>vrr', vim.lsp.buf.references, opts)
-                vim.keymap.set('n', '<leader>vrn', vim.lsp.buf.rename, opts)
-                vim.keymap.set('i', '<C-h>', vim.lsp.buf.signature_help, opts)
-                vim.keymap.set('n', 'gl', vim.diagnostic.open_float, opts)
-            end)
-
-            lsp.setup()
         end
     }
 }
