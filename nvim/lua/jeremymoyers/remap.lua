@@ -111,6 +111,8 @@ vim.api.nvim_create_user_command('GithubCommitLink', function()
     end
 end, {})
 
+vim.keymap.set('n', '<leader>s', ':%s/\\<<C-r><C-w>\\>//g<Left><Left>', { noremap = true })
+
 -- Move lines up and down in normal mode
 vim.keymap.set('n', '<C-j>', ':m .+1<CR>==', { silent = true })
 vim.keymap.set('n', '<C-k>', ':m .-2<CR>==', { silent = true })

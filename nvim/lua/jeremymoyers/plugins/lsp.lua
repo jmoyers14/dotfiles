@@ -84,10 +84,18 @@ return {
                     }
                 }
             }))
-            vim.lsp.config('clangd', common_config)
-            
-            -- Skip denols (similar to your previous skip_server_setup)
-            -- In 0.11, simply not enabling a server achieves this
+
+            vim.lsp.config('sourcekit', vim.tbl_deep_extend('force', common_config, {
+                cmd = {'sourcekit-lsp'},
+                filetypes = {'swift'},
+                capabilities = vim.tbl_deep_extend('force', capabilities, {
+                    workspace = {
+                        didChangeWatchedFiles = {
+                            dynamicRegistration = true,
+                        },
+                    },
+                }),
+            }))
             
             -- Define LSP keymaps on server attach
             vim.api.nvim_create_autocmd("LspAttach", {
@@ -116,7 +124,7 @@ return {
             vim.lsp.enable('ts_ls')
             vim.lsp.enable('eslint')
             vim.lsp.enable('lua_ls')
-            vim.lsp.enable('clangd')
+            vim.lsp.enable('sourcekit')
             
             -- Set up nvim-cmp
             local cmp = require('cmp')
