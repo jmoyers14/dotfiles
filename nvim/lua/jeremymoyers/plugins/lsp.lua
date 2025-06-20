@@ -65,12 +65,12 @@ return {
                 capabilities = capabilities,
             }
             
-            -- Set up LSP servers using the new vim.lsp.config interface
             vim.lsp.config('ts_ls', common_config)
             vim.lsp.config('eslint', common_config)
+            vim.lsp.config('denols', common_config)
             vim.lsp.config('lua_ls', vim.tbl_deep_extend('force', common_config, {
                 settings = {
-                    Lua = {
+                   Lua = {
                         diagnostics = {
                             globals = {'vim'}
                         },
@@ -121,9 +121,9 @@ return {
             })
             
             -- Enable configured LSP servers
-            vim.lsp.enable('ts_ls')
-            vim.lsp.enable('eslint')
-            vim.lsp.enable('lua_ls')
+            -- vim.lsp.enable('ts_ls')
+            -- vim.lsp.enable('eslint')
+            -- vim.lsp.enable('lua_ls')
             vim.lsp.enable('sourcekit')
             
             -- Set up nvim-cmp
