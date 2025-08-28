@@ -114,16 +114,16 @@ end, {})
 vim.keymap.set('n', '<leader>s', ':%s/\\<<C-r><C-w>\\>//g<Left><Left>', { noremap = true })
 
 -- Move lines up and down in normal mode
-vim.keymap.set('n', '<C-j>', ':m .+1<CR>==', { silent = true })
-vim.keymap.set('n', '<C-k>', ':m .-2<CR>==', { silent = true })
+-- vim.keymap.set('n', '<C-j>', ':m .+1<CR>==', { silent = true })
+-- vim.keymap.set('n', '<C-k>', ':m .-2<CR>==', { silent = true })
 
 -- Move lines up and down in insert mode
-vim.keymap.set('i', '<C-j>', '<Esc>:m .+1<CR>==gi', { silent = true })
-vim.keymap.set('i', '<C-k>', '<Esc>:m .-2<CR>==gi', { silent = true })
+-- vim.keymap.set('i', '<C-j>', '<Esc>:m .+1<CR>==gi', { silent = true })
+-- vim.keymap.set('i', '<C-k>', '<Esc>:m .-2<CR>==gi', { silent = true })
 
 -- Move lines up and down in visual mode
-vim.keymap.set('v', '<C-j>', ":m '>+1<CR>gv=gv", { silent = true })
-vim.keymap.set('v', '<C-k>', ":m '<-2<CR>gv=gv", { silent = true })
+-- vim.keymap.set('v', '<C-j>', ":m '>+1<CR>gv=gv", { silent = true })
+-- vim.keymap.set('v', '<C-k>', ":m '<-2<CR>gv=gv", { silent = true })
 
 -- Close quickfix menu
 vim.keymap.set('n', '<leader>q', ':cclose<CR>', { silent = true })
