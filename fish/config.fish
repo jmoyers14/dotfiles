@@ -21,7 +21,7 @@ set -gx ANDROID_HOME $HOME/Library/Android/sdk
 set -gx PATH $PATH:$ANDROID_HOME/emulator
 set -gx PATH $PATH:$ANDROID_HOME/platform-tools
 set -gx PATH (yarn global bin) $PATH
-set -gx JAVA_HOME "/Applications/Android Studio.app/Contents/jbr/Contents/Home"
+set -gx JAVA_HOME "/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home"
 
 starship init fish | source
 #set PATH $PATH /usr/local/bin /usr/local/go/bin /Library/TeX/texbin/pdflatex
