@@ -8,6 +8,7 @@ fish_add_path /opt/homebrew/lib/ruby/gems/3.4.0/bin
 fish_add_path /opt/homebrew/bin
 fish_add_path /opt/homebrew/sbin
 fish_add_path /Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
+fish_add_path ~/.bun/bin
 
 alias erc="vim ~/.config/fish/config.fish"
 alias tlogout="rm /var/tmp/com.cooltools.remit-trip.cookie"
