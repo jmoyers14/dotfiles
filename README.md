@@ -51,6 +51,7 @@ ln -s /Users/jeremymoyers/Personal/dotfiles/fish ~/.config/fish
 ln -s /Users/jeremymoyers/Personal/dotfiles/nvim ~/.config/nvim
 ln -s /Users/jeremymoyers/Personal/dotfiles/bin/.local/scripts/tmux-sessionizer .local/bin/tmux-sessionizer
 ln -s /Users/jeremymoyers/Personal/dotfiles/tmux/.tmux.conf .tmux.conf
+ln -s /Users/jeremymoyers/Personal/dotfiles/claude ~/.config/claude
 ```
 
 ### 5. Setup Node.js

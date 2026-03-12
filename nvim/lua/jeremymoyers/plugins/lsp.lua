@@ -43,50 +43,16 @@ return {
                 vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
             end
 
-            -- Add floating window borders to hover and signature help
-            vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
-                vim.lsp.handlers.hover, {
-                    border = "rounded",
-                }
-            )
-
-            vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
-                vim.lsp.handlers.signature_help, {
-                    border = "rounded",
-                }
-            )
-
-            -- Configure LSP capabilities for nvim-cmp
+            -- Configure LSP capabilities for nvim-cmp (apply to all servers)
             local capabilities = vim.lsp.protocol.make_client_capabilities()
             capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
-            -- Define common LSP configurations
-            local common_config = {
+            vim.lsp.config('*', {
                 capabilities = capabilities,
-            }
+            })
 
-            --[[
-            vim.lsp.config('ts_ls', common_config)
-            vim.lsp.config('denols', common_config)
-            vim.lsp.config('lua_ls', vim.tbl_deep_extend('force', common_config, {
-                settings = {
-                    Lua = {
-                        diagnostics = {
-                            globals = { 'vim' }
-                        },
-                        workspace = {
-                            library = vim.api.nvim_get_runtime_file("", true),
-                            checkThirdParty = false,
-                        },
-                        telemetry = {
-                            enable = false,
-                        },
-                    }
-                }
-            }))
-            --]]
-
-            vim.lsp.config('sourcekit', vim.tbl_deep_extend('force', common_config, {
+            -- Configure sourcekit for Swift
+            vim.lsp.config('sourcekit', {
                 cmd = { 'sourcekit-lsp' },
                 filetypes = { 'swift', 'objc', 'objcpp' },
                 capabilities = vim.tbl_deep_extend('force', capabilities, {
@@ -96,7 +62,8 @@ return {
                         },
                     },
                 }),
-            }))
+            })
+            vim.lsp.enable('sourcekit')
 
             -- Define LSP keymaps on server attach
             vim.api.nvim_create_autocmd("LspAttach", {
@@ -121,11 +88,17 @@ return {
                 end
             })
 
-            -- Enable configured LSP servers
-            -- vim.lsp.enable('ts_ls')
-            -- vim.lsp.enable('eslint')
-            -- vim.lsp.enable('lua_ls')
-            vim.lsp.enable('sourcekit')
+            -- Toggle eslint on demand with :EslintToggle
+            vim.api.nvim_create_user_command('EslintToggle', function()
+                local clients = vim.lsp.get_clients({ name = 'eslint' })
+                if #clients > 0 then
+                    vim.lsp.stop_client(clients)
+                    print('Eslint disabled')
+                else
+                    vim.lsp.enable('eslint')
+                    print('Eslint enabled')
+                end
+            end, {})
 
             -- Set up nvim-cmp
             local cmp = require('cmp')

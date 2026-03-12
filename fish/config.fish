@@ -9,6 +9,7 @@ fish_add_path /opt/homebrew/bin
 fish_add_path /opt/homebrew/sbin
 fish_add_path /Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
 fish_add_path ~/.bun/bin
+fish_add_path ~/.local/bin
 
 alias erc="vim ~/.config/fish/config.fish"
 alias tlogout="rm /var/tmp/com.cooltools.remit-trip.cookie"
@@ -21,7 +22,7 @@ end
 set -gx ANDROID_HOME $HOME/Library/Android/sdk
 set -gx PATH $PATH:$ANDROID_HOME/emulator
 set -gx PATH $PATH:$ANDROID_HOME/platform-tools
-set -gx PATH (yarn global bin) $PATH
+fish_add_path ~/.yarn/bin
 set -gx JAVA_HOME "/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home"
 
 starship init fish | source
@@ -31,6 +32,13 @@ starship init fish | source
 # Set up fzf key bindings
 #fzf --fish | source
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/jmoyers/google-cloud-sdk/path.fish.inc' ]; . '/Users/jmoyers/google-cloud-sdk/path.fish.inc'; end
+# Google Cloud SDK
+if test -f '/Users/jeremymoyers/google-cloud-sdk/path.fish.inc'
+    source '/Users/jeremymoyers/google-cloud-sdk/path.fish.inc'
+end
+
+
+# Added by LM Studio CLI (lms)
+set -gx PATH $PATH /Users/jeremymoyers/.lmstudio/bin
+# End of LM Studio CLI section
 

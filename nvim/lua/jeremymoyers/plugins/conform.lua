@@ -7,10 +7,18 @@ return {
     conform.setup({
       formatters_by_ft = {
         swift = { "swiftformat" },
+        javascript = { "prettier" },
+        typescript = { "prettier" },
+        javascriptreact = { "prettier" },
+        typescriptreact = { "prettier" },
+        css = { "prettier" },
+        html = { "prettier" },
+        json = { "prettier" },
       },
-      format_on_save = function(bufnr)
-        return { timeout_ms = 500, lsp_fallback = true }
-      end,
+      format_on_save = {
+        timeout_ms = 2000,
+        lsp_fallback = true,
+      },
       log_level = vim.log.levels.ERROR,
     })
  
@@ -18,7 +26,7 @@ return {
       conform.format({
         lsp_fallback = true,
         async = false,
-        timeout_ms = 500,
+        timeout_ms = 2000,
       })
     end, { desc = "Format file or range (in visual mode)" })
   end,

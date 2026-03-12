@@ -137,3 +137,10 @@ vim.keymap.set('n', '*', function()
     vim.fn.setreg('/', '\\<' .. word .. '\\>')
     vim.opt.hlsearch = true
 end)
+
+-- Copy current file path to clipboard
+vim.api.nvim_create_user_command('CopyPath', function()
+    local path = vim.fn.expand('%:p')
+    vim.fn.setreg('+', path)
+    print('Path copied: ' .. path)
+end, { desc = 'Copy absolute file path to clipboard' })
