@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+
+# Usage: create-worktree <branch-name>
+#
+# Creates a git worktree at ~/Worktrees/<repo>_<branch>, symlinks any
+# .env / .env.* files from the source repo's main worktree, and opens
+# a tmux session for it via tmux-sessionizer.
+#
+# Slashes in the branch name (e.g. ticket/description) are flattened in
+# the directory name so the worktree stays a single, top-level folder.
+#
+# Must be run from inside a git repository.
+
+if [[ $# -ne 1 ]]; then
+    echo "Usage: create-worktree <branch-name>" >&2
+    exit 1
+fi
+
+branch=$1
+
+if ! src=$(git rev-parse --show-toplevel 2>/dev/null); then
+    echo "Error: not inside a git repository" >&2
+    exit 1
+fi
+
+# Resolve the main worktree so symlink sources don't chain through
+# another worktree's own symlinks.
+main_worktree=$(git -C "$src" worktree list --porcelain | awk '/^worktree / {print $2; exit}')
+if [[ -z $main_worktree ]]; then
+    main_worktree=$src
+fi
+
+repo_name=$(basename "$main_worktree")
+worktree_root="$HOME/Worktrees"
+
+# Flatten slashes so the worktree is one top-level dir, not nested. Git
+# still tracks the real (slashed) branch name; this only names the path.
+branch_slug=${branch//\//-}
+dest="$worktree_root/${repo_name}_${branch_slug}"
+
+if [[ -e $dest ]]; then
+    echo "Error: $dest already exists" >&2
+    exit 1
+fi
+
+mkdir -p "$worktree_root"
+
+if git -C "$src" show-ref --verify --quiet "refs/heads/$branch"; then
+    git -C "$src" worktree add "$dest" "$branch"
+else
+    git -C "$src" worktree add "$dest" -b "$branch"
+fi
+
+for f in "$main_worktree"/.env "$main_worktree"/.env.*; do
+    [[ -e $f ]] || continue
+    name=$(basename "$f")
+    ln -s "$f" "$dest/$name"
+    echo "  symlinked $name -> $f"
+done
+
+if command -v tmux-sessionizer >/dev/null 2>&1; then
+    exec tmux-sessionizer "$dest"
+else
+    echo "Worktree ready: $dest"
+    echo "(tmux-sessionizer not on PATH; open the session manually)"
+fi
