@@ -3,7 +3,14 @@
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    selected=$(find ~/Code ~/Personal ~/Projects ~/Worktrees -mindepth 1 -maxdepth 1 -type d 2>/dev/null | fzf)
+    # Parent "agent" repos to surface directly. Their sub-repos live nested
+    # under repositories/ and must NOT appear as separate sessions, so we list
+    # the parent explicitly rather than adding it as a -maxdepth 1 root.
+    agent_repos=(~/Trova)
+    selected=$( { \
+        find ~/Code ~/Personal ~/Projects ~/Worktrees -mindepth 1 -maxdepth 1 -type d 2>/dev/null; \
+        printf '%s\n' "${agent_repos[@]}"; \
+    } | fzf)
 fi
 
 if [[ -z $selected ]]; then

@@ -51,12 +51,25 @@ else
     git -C "$src" worktree add "$dest" -b "$branch"
 fi
 
-for f in "$main_worktree"/.env "$main_worktree"/.env.*; do
-    [[ -e $f ]] || continue
-    name=$(basename "$f")
-    ln -s "$f" "$dest/$name"
-    echo "  symlinked $name -> $f"
-done
+while IFS= read -r f; do
+    rel=${f#"$main_worktree"/}
+    [[ -e $dest/$rel ]] && continue
+    mkdir -p "$dest/$(dirname "$rel")"
+    ln -s "$f" "$dest/$rel"
+    echo "  symlinked $rel"
+done < <(find "$main_worktree" \
+    \( -name node_modules -o -name .git \) -prune \
+    -o -type f \( -name '.env' -o -name '.env.*' \) -print)
+
+# Symlink the project's .claude dir (skills, local settings) so every
+# worktree shares one source of truth. Skills are workflow config, not
+# branch content — a fix made in one worktree should apply everywhere at
+# once rather than waiting to be merged. Whole-dir symlink, not the file
+# loop above, since .claude is a directory.
+if [[ -d $main_worktree/.claude && ! -e $dest/.claude ]]; then
+    ln -s "$main_worktree/.claude" "$dest/.claude"
+    echo "  symlinked .claude"
+fi
 
 if command -v tmux-sessionizer >/dev/null 2>&1; then
     exec tmux-sessionizer "$dest"
